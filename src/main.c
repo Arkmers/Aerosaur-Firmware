@@ -1,8 +1,10 @@
+#include "sdkconfig.h"
 #include <stdio.h>
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
+#include "esp_system.h"
 
 // --- App Core --- //
 #include "app/app_event.h"
@@ -12,10 +14,11 @@
 #include "modules/storage/storage.h"
 #include "modules/connectivity/connectivity.h"
 #include "modules/mqtt/mqtt_module.h"
-#include "modules/sensor/sensors.h"
+#include "modules/sensors/sensors.h"
 #include "modules/fan_controller/fan_controller.h"
 #include "modules/input/input.h"
 #include "modules/system_monitor/system_monitor.h"
+#include "modules/provisioning/provisioning.h"
 
 static const char *TAG = "AEROSAUR_CORE";
 
@@ -65,6 +68,13 @@ void app_main(void) {
 
             switch (event.type) {
                 
+                case EV_WIFI_PROV_RECV:
+                    ESP_LOGI(TAG, "BLE Provisioning Received! Saving...");
+                    storage_write_wifi(event.data.wifi_prov.ssid, event.data.wifi_prov.pass);
+                    vTaskDelay(pdMS_TO_TICKS(1000));
+                    esp_restart();
+                    break;
+
                 case EV_WIFI_STATUS:
                     if (event.data.wifi_status && !is_wifi_connected) {
                         ESP_LOGI(TAG, "Wifi Connected! Initializing MQTT...");

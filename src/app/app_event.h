@@ -7,6 +7,7 @@ typedef enum {
     EV_BTN_PRESSED,
     EV_SENSOR_DATA,
     EV_MQTT_CMD,
+    EV_WIFI_PROV_RECV,
     EV_SYS_RESET
 } app_event_type_t;
 
@@ -26,6 +27,11 @@ typedef struct {
             int speed_idx;
             char cmd_id[36];
         } fan;
+        struct {
+            char ssid[32];
+            char pass[64];
+        } wifi_prov;
+
         bool wifi_status;
     } data;
 } app_event_t;

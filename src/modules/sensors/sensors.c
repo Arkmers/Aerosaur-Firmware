@@ -1,4 +1,4 @@
-#include "sensors.h"wwwww
+#include "sensors.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "driver/adc.h"
@@ -30,7 +30,7 @@ void sensors_task(void *arg) {
     // ----- Initializing Sensors ----- //
     // --- MQ135 --- //
     adc1_config_width(ADC_WIDTH_BIT_12);
-    adc1_config_channel_atten(MQ135_ADC_CH, ADC_ATTEN_DB_11);
+    adc1_config_channel_atten(MQ135_ADC_CH, ADC_ATTEN_DB_12);
 
     // --- PMS5003 --- //
     uart_config_t uart_config = {
